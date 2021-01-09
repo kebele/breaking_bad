@@ -12,12 +12,16 @@ const App = () => {
 const [ items, setItems ] = useState([])
 //diğer state api den veriler fetch edilirken ki süre için, loading esnasında true olacak diğer durumlarda false olacak
 const [ isLoading, setIsLoading] = useState(true)
+//inputa girilen Search.js de state olmuştu şimdi o değeri alıp burada API ye yollyacağız
+const [ query, setQuery ] = useState("")
+
 
 //useEffect ise süreci başlatma
 useEffect(() => {
   const fetchItems = async () => {
+    setIsLoading(true)
     //api deki verileri alalım
-    const result = await axios(`https://www.breakingbadapi.com/api/characters`)
+    const result = await axios(`https://www.breakingbadapi.com/api/characters?name=${query}`)
 
     console.log(result.data);
     //verileri Items a ayarlayalım
@@ -27,12 +31,14 @@ useEffect(() => {
   }
 
   fetchItems()
-}, [])
+}, [query])
 
   return (
     <div className="container">
       <Header />
-      <Search />
+      <Search 
+        getQuery={(q) => setQuery(q)}
+      />
       <CharacterGrid 
           isLoading = { isLoading }
           items = { items }
@@ -67,5 +73,7 @@ const CharacterGrid = ({ items, isLoading }) => {
   );
 };
 export default CharacterGrid;
+
+useEffect te ikinci parametre burada query yani her değiştiğinde useEffect yeniden çalışır
 
 */
